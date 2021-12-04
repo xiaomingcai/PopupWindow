@@ -22,6 +22,8 @@ import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,7 @@ import java.util.List;
  * @author zmz
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "PopupWindow";
     private View view;
     private Button btnPopDown;
     private PopupWindow myPop;
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CardView cvMain;
     private ImageView imageView;
     private List<View> views;
+    private FloatingActionButton fabStart;
+    private FloatingActionButton fabEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +52,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnPopQq = findViewById(R.id.btn_pop_qq);
         Button btnPagerCenter = findViewById(R.id.btn_pager_center);
         btnPopDown = findViewById(R.id.btn_pop_down);
+        fabStart = findViewById(R.id.flb_pop_start);
+        fabEnd = findViewById(R.id.flb_pop_end);
         imageView = findViewById(R.id.iv);
         cvMain = findViewById(R.id.cv_app);
         btnPopPicSelect.setOnClickListener(this);
         btnPopQq.setOnClickListener(this);
         btnPagerCenter.setOnClickListener(this);
+        fabStart.setOnClickListener(this);
+        fabEnd.setOnClickListener(this);
         btnPopDown.setOnClickListener(this);
 
     }
@@ -95,9 +104,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 imageView.setVisibility(View.GONE);
                 myPop.dismiss();
                 break;
+            case R.id.flb_pop_start:
+                showStart();
+                break;
+            case R.id.flb_pop_end:
+                showEnd();
             default:
                 break;
         }
+    }
+
+    @SuppressLint("InflateParams")
+    private void showEnd() {
+        view = LayoutInflater.from(this).inflate(R.layout.item_end_input, null, false);
+        myPop = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        myPop.setBackgroundDrawable(new ColorDrawable(0x00ffffff));
+        myPop.setOutsideTouchable(true);
+        //获取焦点
+        myPop.setFocusable(true);
+        myPop.getContentView().measure(0, 0);
+        myPop.showAsDropDown(fabEnd, (int) (fabEnd.getWidth() * 1.3), -((fabEnd.getHeight() +
+                myPop.getContentView().getMeasuredHeight()) / 2));
+    }
+
+    @SuppressLint("InflateParams")
+    private void showStart() {
+        view = LayoutInflater.from(this).inflate(R.layout.item_pop_start, null, false);
+        myPop = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        myPop.setBackgroundDrawable(new ColorDrawable());
+        myPop.setOutsideTouchable(true);
+        myPop.getContentView().measure(0, 0);
+        myPop.showAsDropDown(fabStart, -(myPop.getContentView().getMeasuredWidth()),
+                -(fabStart.getHeight() / 2 + myPop.getContentView().getMeasuredHeight()));
+        Log.d(TAG, "showStart: x=" + (-(myPop.getContentView().getMeasuredWidth())) + "\n" + "y=" + (-(fabStart.getHeight() / 2 + myPop.getContentView().getMeasuredHeight())));
     }
 
     @SuppressLint("InflateParams")
