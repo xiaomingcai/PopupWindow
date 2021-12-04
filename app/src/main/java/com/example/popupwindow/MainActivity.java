@@ -31,6 +31,7 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private View view;
+    private Button btnPopDown;
     private PopupWindow myPop;
     private RelativeLayout rlMain;
     private CardView cvMain;
@@ -45,11 +46,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnPopPicSelect = findViewById(R.id.btn_pop_pic_select);
         Button btnPopQq = findViewById(R.id.btn_pop_qq);
         Button btnPagerCenter = findViewById(R.id.btn_pager_center);
+        btnPopDown = findViewById(R.id.btn_pop_down);
         imageView = findViewById(R.id.iv);
         cvMain = findViewById(R.id.cv_app);
         btnPopPicSelect.setOnClickListener(this);
         btnPopQq.setOnClickListener(this);
         btnPagerCenter.setOnClickListener(this);
+        btnPopDown.setOnClickListener(this);
 
     }
 
@@ -67,6 +70,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_pager_center:
                 showPager();
                 break;
+            case R.id.btn_pop_down:
+                showDown();
+                break;
+            case R.id.ll_pic:
             case R.id.btn_pic_camera:
                 Toast.makeText(this, "相机拍摄", Toast.LENGTH_LONG).show();
                 myPop.dismiss();
@@ -91,6 +98,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 break;
         }
+    }
+
+    @SuppressLint("InflateParams")
+    private void showDown() {
+        Log.d("PopUpWindow", "showDown");
+        view = LayoutInflater.from(this).inflate(R.layout.item_anywhere, null, false);
+        myPop = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        myPop.setBackgroundDrawable(new ColorDrawable());
+        myPop.setOutsideTouchable(true);
+        myPop.getContentView().measure(0, 0);
+        myPop.showAsDropDown(btnPopDown, -((myPop.getContentView().getMeasuredWidth() - btnPopDown.getWidth() / 2)), 0);
+
     }
 
     @SuppressLint("InflateParams")
@@ -134,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("InflateParams")
     private void showPicSelect() {
         view = LayoutInflater.from(this).inflate(R.layout.item_pic_select, null, false);
-        LinearLayout llPop =  view.findViewById(R.id.ll_pic);
+        LinearLayout llPop = view.findViewById(R.id.ll_pic);
         Button btnCamera = view.findViewById(R.id.btn_pic_camera);
         Button btnPhoto = view.findViewById(R.id.btn_pic_photo);
         Button btnCancel = view.findViewById(R.id.btn_pic_cancel);
