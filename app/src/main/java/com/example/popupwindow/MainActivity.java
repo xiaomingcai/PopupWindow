@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<View> views;
     private FloatingActionButton fabStart;
     private FloatingActionButton fabEnd;
+    private View picView01;
+    private View picView02;
+    private View picView03;
+    private View picView04;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,10 +160,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         views = new ArrayList<>();
         view = LayoutInflater.from(this).inflate(R.layout.item_pager, null, false);
         ViewPager vpPop = view.findViewById(R.id.vp_pop);
-        View picView01 = LayoutInflater.from(this).inflate(R.layout.item_pop_vp_01, null, false);
-        View picView02 = LayoutInflater.from(this).inflate(R.layout.item_pop_vp_02, null, false);
-        View picView03 = LayoutInflater.from(this).inflate(R.layout.item_pop_vp_03, null, false);
-        View picView04 = LayoutInflater.from(this).inflate(R.layout.item_pop_vp_04, null, false);
+        picView01 = LayoutInflater.from(this).inflate(R.layout.item_pop_vp_01, null, false);
+        picView02 = LayoutInflater.from(this).inflate(R.layout.item_pop_vp_02, null, false);
+        picView03 = LayoutInflater.from(this).inflate(R.layout.item_pop_vp_03, null, false);
+        picView04 = LayoutInflater.from(this).inflate(R.layout.item_pop_vp_04, null, false);
         views.add(picView01);
         views.add(picView02);
         views.add(picView03);
@@ -229,6 +233,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             Log.d("PopUpWindow", "destroyItem position=" + position);
             container.removeView(views.get(position));
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (myPop != null) {
+            myPop.dismiss();
+            myPop = null;
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (views != null) {
+            views.remove(picView01);
+            views.remove(picView02);
+            views.remove(picView03);
+            views.remove(picView04);
+        }
+        if (myPop != null) {
+            myPop.dismiss();
         }
     }
 }
